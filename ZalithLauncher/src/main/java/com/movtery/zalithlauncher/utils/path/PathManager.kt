@@ -38,7 +38,7 @@ class PathManager {
         fun initContextConstants(context: Context) {
             DIR_NATIVE_LIB = context.applicationInfo.nativeLibraryDir
             DIR_FILE = context.filesDir
-            DIR_DATA = DIR_FILE.getParent()!!
+            DIR_DATA = DIR_FILE.absolutePath
             DIR_CACHE = context.cacheDir
             DIR_MULTIRT_HOME = "$DIR_DATA/runtimes"
             DIR_GAME_HOME = getExternalStorageRoot(context).absolutePath

@@ -62,10 +62,11 @@ class UnpackComponentsTask(val context: Context, val component: Components) : Ab
 
     private fun requestEmptyParentDir(file: File) {
         file.parentFile!!.apply {
-            if (exists() and isDirectory) {
-                FileUtils.deleteDirectory(this)
+            if (exists() && isDirectory) {
+                runCatching { FileUtils.cleanDirectory(this) }
+            } else {
+                mkdirs()
             }
-            mkdirs()
         }
     }
 }

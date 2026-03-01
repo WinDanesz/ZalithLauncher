@@ -41,10 +41,11 @@ public class FileUtils {
      * @return if the check has succeeded
      */
     public static boolean ensureDirectorySilently(File targetFile) {
-        if(targetFile.isFile()) return false;
+        if(targetFile.isFile()) targetFile.delete();
         if(targetFile.exists()) return targetFile.canWrite();
-        else return targetFile.mkdirs();
-
+        
+        targetFile.mkdirs();
+        return targetFile.exists() && targetFile.isDirectory();
     }
 
     /**
@@ -64,10 +65,27 @@ public class FileUtils {
      * @throws IOException when the checks fail
      */
     public static void ensureDirectory(File targetFile) throws IOException{
-        if(targetFile.isFile()) throw new IOException("Target directory is a file");
+        if(targetFile.isFile()) {
+            if (!targetFile.delete()) {
+                throw new IOException("Target directory is a file and cannot be deleted: " + targetFile.getAbsolutePath());
+            }
+        }
         if(targetFile.exists()) {
-            if(!targetFile.canWrite()) throw new IOException("Target directory is not writable");
-        }else if(!targetFile.mkdirs()) throw new IOException("Unable to create target directory");
+            if(!targetFile.canWrite()) throw new IOException("Target directory is not writable: " + targetFile.getAbsolutePath());
+        } else {
+            if (android.os.Build.VERSION.SDK_INT >= 26) {
+                try {
+                    java.nio.file.Files.createDirectories(targetFile.toPath());
+                } catch (Exception e) {
+                    throw new IOException("Unable to create target directory: " + targetFile.getAbsolutePath() + " - " + e.toString(), e);
+                }
+            } else {
+                targetFile.mkdirs();
+            }
+            if(!targetFile.exists() || !targetFile.isDirectory()) {
+                throw new IOException("Unable to create target directory: " + targetFile.getAbsolutePath());
+            }
+        }
     }
 
     /**

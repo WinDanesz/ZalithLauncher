@@ -66,7 +66,7 @@ public class PojavApplication extends Application {
 		
 		try {
 			super.onCreate();
-			PathManager.DIR_DATA = getDir("files", MODE_PRIVATE).getAbsolutePath();
+			PathManager.DIR_DATA = getFilesDir().getAbsolutePath();
 			PathManager.DIR_CACHE = getCacheDir();
 			PathManager.DIR_ACCOUNT_NEW = PathManager.DIR_DATA + "/accounts";
 			Tools.DEVICE_ARCHITECTURE = Architecture.getDeviceArchitecture();

@@ -72,7 +72,7 @@ class PathManager {
         @JvmStatic
         fun getExternalStorageRoot(ctx: Context): File {
             return if (VERSION.SDK_INT >= 29) {
-                ctx.getExternalFilesDir(null)!!
+                File(ctx.filesDir, "games")
             } else {
                 File(Environment.getExternalStorageDirectory(), "games/${InfoDistributor.LAUNCHER_NAME}")
             }

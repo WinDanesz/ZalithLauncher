@@ -89,6 +89,11 @@ public final class Tools {
      */
     public static boolean checkStorageRoot() {
         File externalFilesDir = new File(PathManager.DIR_GAME_HOME);
+        // For internal storage paths (Android 11+), just ensure the directory exists
+        if (externalFilesDir.getAbsolutePath().startsWith(PathManager.DIR_DATA)) {
+            externalFilesDir.mkdirs();
+            return externalFilesDir.isDirectory() && externalFilesDir.canWrite();
+        }
         //externalFilesDir == null when the storage is not mounted if it was obtained with the context call
         return Environment.getExternalStorageState(externalFilesDir).equals(Environment.MEDIA_MOUNTED);
     }

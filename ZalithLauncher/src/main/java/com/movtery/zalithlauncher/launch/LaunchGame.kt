@@ -124,7 +124,12 @@ class LaunchGame {
                 Renderers.setCurrentRenderer(activity, AllSettings.renderer.getValue())
             }
 
-            var account = AccountsManager.currentAccount!!
+            var account = AccountsManager.currentAccount ?: run {
+                activity.runOnUiThread {
+                    Toast.makeText(activity, "No account selected. Please select an account first.", Toast.LENGTH_LONG).show()
+                }
+                return
+            }
             if (minecraftVersion.offlineAccountLogin) {
                 account = MinecraftAccount().apply {
                     this.username = account.username

@@ -60,19 +60,21 @@ class SplashActivity : BaseActivity() {
             return
         }
 
-        //如果安卓版本小于等于9，则检查存储权限（不是管理所有文件权限），拥有存储权限会保证文件、文件夹正常创建
-        //但是并不强制要求用户必须授予权限，如果用户拒绝，那么之后产生的问题将由用户承担
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P && !StoragePermissionsUtils.hasStoragePermissions(this)) {
-            TipDialog.Builder(this)
-                .setTitle(R.string.generic_warning)
-                .setMessage(InfoCenter.replaceName(this, R.string.permissions_write_external_storage))
-                .setWarning()
-                .setConfirmClickListener { requestStoragePermissions() }
-                .setCancelClickListener { checkEnd() } //用户取消，那就跟随用户的意愿
-                .showDialog()
-        } else {
-            checkEnd()
-        }
+        // We now check storage permissions for all versions, using StoragePermissionsUtils
+        // to handle the differences between Android 10- and Android 11+.
+        StoragePermissionsUtils.checkPermissions(this,
+            R.string.generic_warning,
+            InfoCenter.replaceName(this, R.string.permissions_manage_external_storage),
+            object : StoragePermissionsUtils.PermissionGranted {
+                override fun granted() {
+                    checkEnd()
+                }
+
+                override fun cancelled() {
+                    // Si el usuario cancela, seguimos adelante bajo su propia responsabilidad
+                    checkEnd()
+                }
+            })
     }
 
     private fun requestStoragePermissions() {
@@ -92,6 +94,13 @@ class SplashActivity : BaseActivity() {
         if (requestCode == STORAGE_PERMISSION_REQUEST_CODE) {
             //无论用户是否授予了权限，都会完成检查，因为启动器并不强制要求权限
             //但是一旦因为存储权限出现了问题，那么将由用户自行承担后果
+            checkEnd()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 0) { // REQUEST_CODE_PERMISSIONS en StoragePermissionsUtils
             checkEnd()
         }
     }

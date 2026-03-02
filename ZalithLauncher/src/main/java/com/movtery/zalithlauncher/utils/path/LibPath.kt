@@ -7,10 +7,10 @@ import java.io.File
 class LibPath {
     companion object {
         private val COMPONENTS_DIR = File(DIR_DATA, "components")
-        private val OTHER_LOGIN_DIR = File(DIR_GAME_HOME, "other_login")
+        private val OTHER_LOGIN_DIR = File(DIR_DATA, "other_login")
 
-        @JvmField val CACIO_8 = File(DIR_GAME_HOME, "caciocavallo")
-        @JvmField val CACIO_17 = File(DIR_GAME_HOME, "caciocavallo17")
+        @JvmField val CACIO_8 = File(DIR_DATA, "caciocavallo")
+        @JvmField val CACIO_17 = File(DIR_DATA, "caciocavallo17")
         @JvmField val CACIO_17_AGENT = File(CACIO_17, "cacio-agent.jar")
 
         @JvmField val FORGE_INSTALLER = File(COMPONENTS_DIR, "forge_installer.jar")

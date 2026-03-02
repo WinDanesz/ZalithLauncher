@@ -164,7 +164,7 @@ public final class Tools {
 
     public static String getLWJGL3ClassPath() {
         StringBuilder libStr = new StringBuilder();
-        File lwjgl3Folder = new File(PathManager.DIR_GAME_HOME, "lwjgl3");
+        File lwjgl3Folder = new File(PathManager.DIR_DATA, "lwjgl3");
         File[] lwjgl3Files = lwjgl3Folder.listFiles();
         if (lwjgl3Files != null) {
             for (File file: lwjgl3Files) {
@@ -174,7 +174,9 @@ public final class Tools {
             }
         }
         // Remove the ':' at the end
-        libStr.setLength(libStr.length() - 1);
+        if (libStr.length() > 0) {
+            libStr.setLength(libStr.length() - 1);
+        }
         return libStr.toString();
     }
 

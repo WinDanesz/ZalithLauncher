@@ -162,6 +162,18 @@ class AboutInfoPageFragment() : Fragment(R.layout.fragment_about_info_page) {
                 )
             )
         )
+        mAboutData.add(
+            AboutItemBean(
+                resources.getDrawable(R.drawable.image_about_destroyerdarkness, requireContext().theme),
+                "DestroyerDarkNess",
+                getString(R.string.about_DestroyerDarkNess_desc),
+                AboutItemButtonBean(
+                    requireActivity(),
+                    "Github",
+                    "https://github.com/DestroyerDarkNess"
+                )
+            )
+        )
     }
 }
 
